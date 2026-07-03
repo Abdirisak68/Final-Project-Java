@@ -1,17 +1,19 @@
 package groupd.backend.Controllers;
 
-import groupd.backend.Dto.requests.UpdateProfileRequest;
 import groupd.backend.Dto.UserDTO;
+import groupd.backend.Dto.response.ApiResponse;
 import groupd.backend.Services.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,14 +23,26 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getMe() {
+    public ResponseEntity<ApiResponse<UserDTO>> getMe() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(userService.getProfile(email));
+        UserDTO user = userService.getProfile(email);
+        ApiResponse<UserDTO> response = new ApiResponse<>(true, "User profile retrieved successfully", user);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/me")
-    public ResponseEntity<UserDTO> updateMe(@Valid @RequestBody UpdateProfileRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(userService.updateProfile(email, request));
+    @GetMapping("/all-users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getAll() {
+        List<UserDTO> users = userService.findAllUsers();
+        ApiResponse<List<UserDTO>> response = new ApiResponse<>(true, "All users retrieved successfully", users);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        ApiResponse<Void> response = new ApiResponse<>(true, "User deleted successfully", null);
+        return ResponseEntity.ok(response);
     }
 }

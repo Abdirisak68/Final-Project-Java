@@ -1,14 +1,14 @@
 package groupd.backend.Services;
 
-import groupd.backend.Dto.requests.UpdateProfileRequest;
 import groupd.backend.Dto.UserDTO;
 import groupd.backend.Entities.User;
 import groupd.backend.Repositories.UserRepository;
 import groupd.backend.Exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +22,18 @@ public class UserService {
         return UserDTO.fromEntity(user);
     }
 
-    public UserDTO updateProfile(String email, UpdateProfileRequest request) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+   public List<UserDTO> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : users) {
+            userDTOs.add(UserDTO.fromEntity(user));
         }
+        return userDTOs;
+   }
 
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        userRepository.save(user);
-
-        return UserDTO.fromEntity(user);
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        userRepository.delete(user);
     }
 }
