@@ -37,39 +37,6 @@ public Destination findById(long id){
 }
 
 
-//public DestinationRequest createDestination(DestinationRequest destRequest,MultipartFile file) {
-//    if (destRepository.existsByDestCountry(destRequest.getDestCountry())) {
-//        throw new DuplicateResourceException("Destination already exists");
-//    }
-//    String uploadDirectory = "src/main/resources/static/uploads/";
-//    String browserUrl = destRequest.getDestImageUrl();
-//
-//        if (file != null && !file.isEmpty()) {
-//            try {
-//                File folder = new File(uploadDirectory);
-//                if (!folder.exists()) {
-//                    folder.mkdir();
-//                }
-//                String uniqueFileName = System.currentTimeMillis()+ "_"+file.getOriginalFilename();
-//                Path targetPath = Paths.get(uploadDirectory + uniqueFileName);
-//
-//                Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                browserUrl = "/uploads/"+uniqueFileName;
-//            }catch (Exception e){
-//        throw  new RuntimeException("Error while uploading file");
-//        }
-//
-//    Destination destination = new Destination();
-//    destination.setDestCountry(destRequest.getDestCountry());
-//    destination.setDestCities(new ArrayList<>(destRequest.getDestCities()));
-//    destination.setDestDescription(destRequest.getDestDescription());
-//    destination.setDestImageUrl(browserUrl);
-//    destination.setCreated_at(LocalDateTime.now());
-//    destRepository.save(destination);
-//    return destRequest;
-//}
-//}
 
 public DestinationRequest createDestination(DestinationRequest destRequest, MultipartFile file) {
     if (destRepository.existsByDestCountry(destRequest.getDestCountry())) {
@@ -87,7 +54,7 @@ public DestinationRequest createDestination(DestinationRequest destRequest, Mult
         try {
             File folder = new File(uploadDirectory);
             if (!folder.exists()) {
-                folder.mkdirs(); // mkdirs() ayaa ka fiican mkdir() sababtoo ah waxay wada dhalisaa folderada isku dhex jira
+                folder.mkdirs();
             }
 
             String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
@@ -95,7 +62,7 @@ public DestinationRequest createDestination(DestinationRequest destRequest, Mult
 
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            // XALKA 1: Halkan ku dar / dhexda si uu u noqdo /uploads/12345_sawir.jpg
+
             browserUrl = "/uploads/" + uniqueFileName;
 
         } catch (Exception e) {
@@ -108,7 +75,7 @@ public DestinationRequest createDestination(DestinationRequest destRequest, Mult
     destination.setDestCities(new ArrayList<>(destRequest.getDestCities()));
     destination.setDestDescription(destRequest.getDestDescription());
 
-    // XALKA 2: Halkan ka saar comment-ka oo sii saaxiibkaaga 'browserUrl' ee kor ku dhashay!
+
     destination.setDestImageUrl(browserUrl);
 
     destination.setCreated_at(LocalDateTime.now());
