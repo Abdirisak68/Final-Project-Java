@@ -18,7 +18,7 @@ import java.util.List;
 public class TravelPackageController {
     private final TravelPackageService service;
 
-//    Public endpoints
+//    findAll endpoints
     @GetMapping
     @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<List<TravelPackage>>> findAllPackage() {
@@ -27,7 +27,7 @@ public class TravelPackageController {
         return ResponseEntity.ok(response);
     }
 
-//    Admin Endpoint
+//    Admin Endpoint create
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> addPackage(@Valid @RequestBody groupd.backend.DTOs.TravelPackageRequestDTO newPackage) {
@@ -38,5 +38,31 @@ public class TravelPackageController {
                 null
         );
         return ResponseEntity.ok(response);
+    }
+
+    // Find By ID
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ApiResponse<TravelPackage>> findById(@PathVariable Long id) {
+        TravelPackage data = service.findPackageById(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Package details", data));
+    }
+
+    //  Delete
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> deletePackage(@PathVariable Long id) {
+        service.deleteTravelPackage(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Package deleted successfully", null));
+    }
+
+    //  Update
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<TravelPackage>> updatePackage(
+            @PathVariable Long id,
+            @Valid @RequestBody TravelPackageRequestDTO dto) {
+        TravelPackage updated = service.updateTravelPackage(id, dto);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Package updated successfully", updated));
     }
 }

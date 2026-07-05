@@ -3,6 +3,7 @@ package groupd.backend.Services;
 import groupd.backend.Entities.Destination;
 import groupd.backend.Entities.TravelPackage;
 import groupd.backend.DTOs.TravelPackageRequestDTO;
+import groupd.backend.Exceptions.ResourceNotFoundException;
 import groupd.backend.Repositories.DestinationRepository;
 import groupd.backend.Repositories.TravelPackageRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,31 @@ public class TravelPackageService {
 
         newPackage.setDestination(destination);
         travelRepo.save(newPackage);
+    }
+    public void deleteTravelPackage(Long id) {
+        if (!travelRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Cannot delete, Package not found with id: " + id);
+        }
+        travelRepo.deleteById(id);
+    }
+
+    public TravelPackage updateTravelPackage(Long id, TravelPackageRequestDTO dto) {
+
+        TravelPackage existingPackage = findPackageById(id);
+
+
+        Destination destination = destRepo.findById(dto.getDestinationId())
+                .orElseThrow(() -> new ResourceNotFoundException("Destination not found"));
+
+
+        existingPackage.setPackageName(dto.getPackageName());
+        existingPackage.setPackageDescription(dto.getPackageDescription());
+        existingPackage.setPrice(dto.getPrice());
+        existingPackage.setDurationDays(dto.getDurationDays());
+        existingPackage.setDestination(destination);
+
+
+        return travelRepo.save(existingPackage);
     }
 
 }
