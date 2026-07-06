@@ -1,20 +1,14 @@
-//package groupd.backend.DTOs;
 package groupd.backend.Dto.requests;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 public class TravelPackageRequestDTO {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotBlank(message = "Package name is required")
     @Size(min = 3, max = 100, message = "Package name must be between 3 and 100 characters")
@@ -34,4 +28,32 @@ public class TravelPackageRequestDTO {
     @NotNull(message = "Duration is required")
     @Min(value = 1, message = "Duration must be at least 1 day")
     private Integer durationDays;
+
+    // Flight Information
+    @NotBlank(message = "Airline is required")
+    private String airline;
+
+    @NotBlank(message = "Departure location is required")
+    private String departureLocation;
+
+    @NotBlank(message = "Arrival location is required")
+    private String arrivalLocation;
+
+    @NotNull(message = "Departure date is required")
+    private LocalDate departureDate;
+
+    @NotNull(message = "Departure time is required")
+    private LocalTime departureTime;
+
+    // Hotel Information
+    @NotBlank(message = "Hotel name is required")
+    private String hotelName;
+
+    @NotBlank(message = "Room type is required")
+    private String roomType;
+
+    @NotNull(message = "Number of nights is required")
+    @Min(value = 1, message = "Number of nights must be at least 1")
+    private Long numberOfNights;
+    private boolean available = true;
 }

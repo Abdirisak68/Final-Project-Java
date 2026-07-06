@@ -6,6 +6,7 @@ import groupd.backend.Dto.requests.TravelPackageRequestDTO;
 import groupd.backend.Services.TravelPackageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class TravelPackageController {
 //    findAll endpoints
     @GetMapping
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ApiResponse<List<TravelPackage>>> findAllPackage() {
+    public ResponseEntity<ApiResponse<List<TravelPackage>>> getAllPackages() {
         List<TravelPackage> data = service.findAllPackage();
         ApiResponse<List<TravelPackage>> response = new ApiResponse<>(true, "All Travel Packages", data);
         return ResponseEntity.ok(response);
@@ -30,20 +31,20 @@ public class TravelPackageController {
 //    Admin Endpoint create
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> addPackage(@Valid @RequestBody groupd.backend.Dto.requests.TravelPackageRequestDTO newPackage) {
+    public ResponseEntity<ApiResponse<Void>> createPackage(@Valid @RequestBody TravelPackageRequestDTO newPackage) {
         service.createTravelPackage(newPackage);
         ApiResponse<Void> response = new ApiResponse<>(
                 true,
                 "Package created successfully",
                 null
         );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Find By ID
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ApiResponse<TravelPackage>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TravelPackage>> getPackageById(@PathVariable Long id) {
         TravelPackage data = service.findPackageById(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Package details", data));
     }
