@@ -1,12 +1,20 @@
-package groupd.backend.DTOs;
+//package groupd.backend.DTOs;
+package groupd.backend.Dto.requests;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 
 @Data
 public class TravelPackageRequestDTO {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank(message = "Package name is required")
     @Size(min = 3, max = 100, message = "Package name must be between 3 and 100 characters")

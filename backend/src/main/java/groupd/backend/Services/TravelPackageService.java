@@ -1,15 +1,14 @@
 package groupd.backend.Services;
 
+import groupd.backend.Dto.requests.TravelPackageRequestDTO;
 import groupd.backend.Entities.Destination;
 import groupd.backend.Entities.TravelPackage;
-import groupd.backend.DTOs.TravelPackageRequestDTO;
 import groupd.backend.Exceptions.ResourceNotFoundException;
 import groupd.backend.Repositories.DestinationRepository;
 import groupd.backend.Repositories.TravelPackageRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +27,7 @@ public class TravelPackageService {
         return travelRepo.findById(id).get();
     }
 
-    public void createTravelPackage(TravelPackageRequestDTO dto) {
+    public void createTravelPackage(@Valid  TravelPackageRequestDTO dto) {
         if (travelRepo.existsByPackageName(dto.getPackageName())) {
             throw new RuntimeException("Travel Package already exists");
         }

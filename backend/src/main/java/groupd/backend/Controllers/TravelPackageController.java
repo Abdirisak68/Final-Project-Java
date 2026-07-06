@@ -2,7 +2,7 @@ package groupd.backend.Controllers;
 
 import groupd.backend.Dto.response.ApiResponse;
 import groupd.backend.Entities.TravelPackage;
-import groupd.backend.DTOs.TravelPackageRequestDTO;
+import groupd.backend.Dto.requests.TravelPackageRequestDTO;
 import groupd.backend.Services.TravelPackageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class TravelPackageController {
 //    Admin Endpoint create
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> addPackage(@Valid @RequestBody groupd.backend.DTOs.TravelPackageRequestDTO newPackage) {
+    public ResponseEntity<ApiResponse<Void>> addPackage(@Valid @RequestBody groupd.backend.Dto.requests.TravelPackageRequestDTO newPackage) {
         service.createTravelPackage(newPackage);
         ApiResponse<Void> response = new ApiResponse<>(
                 true,
