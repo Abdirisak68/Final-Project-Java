@@ -52,4 +52,8 @@ public class JwtUtils {
     private Claims parseClaims(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
+
+    public String generateToken(User user) {
+        return null;
+    }
 }
