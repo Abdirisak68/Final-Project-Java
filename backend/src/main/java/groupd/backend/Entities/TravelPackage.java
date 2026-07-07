@@ -1,5 +1,7 @@
 package groupd.backend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,6 +13,8 @@ import java.time.LocalTime;
 @Data
 @Entity
 @Table(name = "travel_package")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonPropertyOrder({"travelPackageId", "packageName", "packageDescription", "destination", "price", "durationDays", "airline", "departureLocation", "arrivalLocation", "departureDate", "departureTime", "hotelName", "roomType", "numberOfNights", "available", "createdDate"})
 public class TravelPackage {
 
     @Id

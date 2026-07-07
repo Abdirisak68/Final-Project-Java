@@ -1,6 +1,7 @@
 package groupd.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import groupd.backend.Enums.PaymentMethod;
 import groupd.backend.Enums.PaymentStatus;
 import jakarta.persistence.*;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "payments")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Payment {
 
     @Id
@@ -36,4 +39,5 @@ public class Payment {
     private PaymentStatus paymentStatus;
 
     private LocalDateTime paymentDate;
+    private BigDecimal refundedAmount;
 }

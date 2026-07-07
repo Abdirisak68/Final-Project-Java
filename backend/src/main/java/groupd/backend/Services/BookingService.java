@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
+    private final EmailService emailService;
     private final BookingRepository bookingRepo;
     private final UserRepository userRepo;
     private final PaymentRepository paymentRepo;
@@ -38,6 +41,7 @@ public class BookingService {
     public Booking getBookingById(Long id) {
         return bookingRepo.findById(id).get();
     }
+
     public List<Booking> getMyBookings(String email) {
 
         User user = userRepo.findByEmail(email)
@@ -70,7 +74,7 @@ public class BookingService {
 
 //        Create Payment
         Long random = System.currentTimeMillis();
-        String reference = "REF"+random;
+        String reference = "REF" + random;
         Payment payment = new Payment();
         payment.setBooking(booking);
         payment.setAmount(totalAmount);
@@ -87,7 +91,7 @@ public class BookingService {
     @Transactional
     public Booking cancelBooking(Long bookingId, String email) throws AccessDeniedException {
 
-        // Logged-in user
+        // Check the Logged-in user
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
@@ -102,19 +106,126 @@ public class BookingService {
             throw new AccessDeniedException("You can only cancel your own booking.");
         }
 
+        if (booking.getBookingStatus() == BookingStatus.CANCELLATION_REQUESTED) {
+            throw new IllegalStateException("Cancellation request has already been submitted.");
+        }
+
         // Prevent cancelling twice
         if (booking.getBookingStatus() == BookingStatus.CANCELLED) {
             throw new IllegalStateException("Booking is already cancelled.");
         }
 
-        // Prevent cancelling completed bookings (optional)
-        if (booking.getBookingStatus() == BookingStatus.CONFIRMED) {
-            throw new IllegalStateException("Confirmed bookings cannot be cancelled.");
-        }
+        // Only can cancel Approved bookings
+        if (booking.getBookingStatus() != BookingStatus.CONFIRMED)
+            throw new IllegalArgumentException("Only confirmed bookings can be cancelled.");
 
-        booking.setBookingStatus(BookingStatus.CANCELLED);
+        Payment payment = paymentRepo.findByBooking_BookingId(bookingId)
+                .orElseThrow(()-> new ResourceNotFoundException("Payment not found for this bookin"));
+
+        booking.setBookingStatus(BookingStatus.CANCELLATION_REQUESTED);
+        payment.setPaymentStatus(PaymentStatus.REFUND_PENDING);
+        paymentRepo.save(payment);
+
+        emailService.sendCancellationRequestToCustomer(booking);
 
         return bookingRepo.save(booking);
+    }
+
+    // update booking status and at same time payment status update
+    @Transactional
+    public Booking updateBookingStatus(Long bookingId, BookingStatus bookingStatus) {
+
+        Booking booking = bookingRepo.findByBookingId(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking is not found"));
+        Payment payment = paymentRepo.findByBooking_BookingId(bookingId).orElseThrow(() -> new ResourceNotFoundException("Payment not found for this booking"));
+
+        if (booking.getBookingStatus() == BookingStatus.CANCELLED) {
+            throw new IllegalArgumentException("Cancelled booking cannot be updated.");
+        }
+
+        switch (bookingStatus) {
+            case CONFIRMED:
+                booking.setBookingStatus(BookingStatus.CONFIRMED);
+                payment.setPaymentStatus(PaymentStatus.APPROVED);
+                emailService.sendBookingConfirmation(booking);
+                break;
+            case REJECTED:
+                booking.setBookingStatus(BookingStatus.REJECTED);
+                payment.setPaymentStatus(PaymentStatus.REJECTED);
+                emailService.sendBookingRejection(booking);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown booking status " + bookingStatus + " USE THESE (CONFIRMED/REJECTED.)");
+        }
+        paymentRepo.save(payment);
+        return bookingRepo.save(booking);
+    }
+
+    @Transactional
+    public Booking approveCancellation(Long bookingId) {
+
+        Booking booking = bookingRepo.findById(bookingId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Booking not found"));
+
+        Payment payment = paymentRepo.findByBooking_BookingId(bookingId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Payment not found"));
+
+        if (booking.getBookingStatus() != BookingStatus.CANCELLATION_REQUESTED) {
+            throw new IllegalArgumentException("No cancellation request found for this booking.");
+        }
+
+        long daysBeforeDeparture = ChronoUnit.DAYS.between(LocalDate.now(), booking.getTravelPackage().getDepartureDate());
+
+        BigDecimal refundPercentage;
+
+        if (daysBeforeDeparture > 10) {
+            refundPercentage = BigDecimal.valueOf(100);
+        } else if (daysBeforeDeparture >= 5) {
+            refundPercentage = BigDecimal.valueOf(50);
+        } else {
+            refundPercentage = BigDecimal.ZERO;
+        }
+
+        BigDecimal refundAmount = booking.getTotalAmount()
+                .multiply(refundPercentage)
+                .divide(BigDecimal.valueOf(100));
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        payment.setPaymentStatus(PaymentStatus.REFUNDED);
+        payment.setRefundedAmount(refundAmount);
+
+        bookingRepo.save(booking);
+        paymentRepo.save(payment);
+
+        emailService.sendRefundApproved(booking, refundPercentage, refundAmount);
+
+        return booking;
+    }
+
+    @Transactional
+    public Booking rejectCancellation(Long bookingId) {
+
+        Booking booking = bookingRepo.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        Payment payment = paymentRepo.findByBooking_BookingId(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+
+        if (booking.getBookingStatus() != BookingStatus.CANCELLATION_REQUESTED) {
+            throw new IllegalArgumentException("No cancellation request found.");
+        }
+
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        payment.setPaymentStatus(PaymentStatus.APPROVED);
+
+        bookingRepo.save(booking);
+        paymentRepo.save(payment);
+
+        emailService.sendRefundRejected(booking);
+
+        return booking;
     }
 
 
