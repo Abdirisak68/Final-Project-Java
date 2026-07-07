@@ -5,21 +5,40 @@ import Home from "./pages/Home";
 import About from "./pages/about";
 import Servace from "./pages/servace";
 import Contact from "./pages/contact";
-import Auth from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
+import PublicLayouts from "./layouts/PublicLayouts";
+import DashboardLayout from "./layouts/DashboardLayout";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <div>
-      <Navbar />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/servace" element={<Servace />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/RegisterPage" element={<RegisterPage />} />
+        {/* Public Routes */}
+        <Route element={<PublicLayouts />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/servace" element={<Servace />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoutes><DashboardLayout /></ProtectedRoutes>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          {/* Add more protected routes here */}
+        </Route>
+
+        {/* Catch-all 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
