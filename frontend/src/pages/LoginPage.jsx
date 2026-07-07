@@ -39,10 +39,9 @@ const LoginPage = () => {
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("firstName", response.data.firstName);
 
-      // 2. Ogeysii Navbar-ka in isbeddel dhacay
+
       window.dispatchEvent(new Event("storage"));
 
-      // 3. Markaa uun u wareeji bogga
       navigate("/");
     } catch (error) {
       console.error("Login Error:", error);

@@ -2,28 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  // Waxaan ka dhex akhrinaynaa localStorage magaca
   const [firstName, setFirstName] = useState(localStorage.getItem("firstName"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Shaqo cusboonaysiinaysa magaca marka event-ku dhaco
     const handleAuthChange = () => {
       setFirstName(localStorage.getItem("firstName"));
     };
 
-    // Dhagayso event-ka "authChange"
     window.addEventListener("authChange", handleAuthChange);
 
-    // Nadiifi event-ka marka component-ku xirmo
     return () => window.removeEventListener("authChange", handleAuthChange);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
-    setFirstName(null); // Isla markiiba ka saar Navbar-ka
-    window.dispatchEvent(new Event("authChange")); // Wargeli qaybaha kale
+    setFirstName(null);
+    window.dispatchEvent(new Event("authChange"));
     navigate("/LoginPage");
   };
   return (

@@ -33,22 +33,21 @@ const RegisterPage = () => {
 
     setLoading(true);
     try {
-      // 1. Samee Register
+    
       const response = await axios.post(
         "http://localhost:8080/api/auth/register",
         formData,
       );
 
-      // 2. Markuu Register-ku guulaysto, isla markiiba kaydi Token-ka iyo Magaca
-      // (Backend-kaagu waa inuu Register-ka dib u soo celiyaa AuthResponse)
+    
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("firstName", response.data.firstName);
 
-      // 3. Wargeli Navbar-ka in uu isbeddel dhacay
+      
       window.dispatchEvent(new Event("authChange"));
 
       alert("Registration Successful! Welcome.");
-      navigate("/"); // U dir bogga hore, isagoo "logged in" ah
+      navigate("/");
     } catch (err) {
       alert("Registration failed. Email might already exist.");
     } finally {
