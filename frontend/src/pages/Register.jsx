@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 import { Plane } from "lucide-react";
 
 const Register = () => {
-  // State for form fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,11 +11,10 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Get auth functions and state from context
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  // Validation function
+  
   const validateForm = () => {
     const newErrors = {};
     if (!firstName.trim()) newErrors.firstName = "First name is required";
@@ -30,7 +28,6 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;

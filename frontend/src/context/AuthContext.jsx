@@ -5,17 +5,14 @@ import { toast } from "react-toastify";
 // Create the context
 const AuthContext = createContext();
 
-// Create the provider component to wrap our app
 export function AuthProvider({ children }) {
-  // State to track if user is logged in and their name
+
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [firstName, setFirstName] = useState(localStorage.getItem("firstName") || null);
-  const [loading, setLoading] = useState(false); // To show loading state
+  const [loading, setLoading] = useState(false); 
 
-  // Get the backend URL from environment variables or use default
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5001";
 
-  // Login function
   const login = async (email, password) => {
     try {
       setLoading(true);
@@ -25,25 +22,24 @@ export function AuthProvider({ children }) {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // Save the token and first name from response
       const data = response.data;
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("firstName", data.firstName || "User");
       setToken(data.accessToken);
       setFirstName(data.firstName || "User");
 
-      window.dispatchEvent(new Event("authChange")); // Update navbar
+      window.dispatchEvent(new Event("authChange")); 
       toast.success("Logged in successfully!");
     } catch (error) {
-      // Show error message
+      
       toast.error(error.response?.data?.message || "Error logging in");
-      throw error; // Re-throw to handle in component
+      throw error; 
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); 
     }
   };
 
-  // Register function
+
   const register = async (firstName, lastName, email, password) => {
     try {
       setLoading(true);
@@ -53,14 +49,14 @@ export function AuthProvider({ children }) {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // Save the token and first name from response
+
       const data = response.data;
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("firstName", data.firstName || firstName);
       setToken(data.accessToken);
       setFirstName(data.firstName || firstName);
 
-      window.dispatchEvent(new Event("authChange")); // Update navbar
+      window.dispatchEvent(new Event("authChange")); 
       toast.success("Registered successfully!");
     } catch (error) {
       toast.error(error.response?.data?.message || "Error registering");
@@ -70,18 +66,17 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Logout function
+
   const logout = () => {
-    // Remove token and first name from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
     setToken(null);
     setFirstName(null);
-    window.dispatchEvent(new Event("authChange")); // Update navbar
+    window.dispatchEvent(new Event("authChange")); 
     toast.info("Logged out!");
   };
 
-  // The value that will be available to all child components
+  
   const value = {
     token,
     firstName,
@@ -96,5 +91,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom hook to easily access the auth context
 export const useAuth = () => useContext(AuthContext);
