@@ -34,7 +34,7 @@ public class DestinationController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<Destination>> getDestinationById(@PathVariable Long id) {
         Destination data = destService.findById(id);
-        ApiResponse<Destination> response = new ApiResponse<>(true, "All destinations", data);
+        ApiResponse<Destination> response = new ApiResponse<>(true, "A Destinations By Id", data);
         return ResponseEntity.ok(response);
     }
 

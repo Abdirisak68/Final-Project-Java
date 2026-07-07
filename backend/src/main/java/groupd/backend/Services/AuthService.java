@@ -52,6 +52,8 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
+
+
     public void updatePassword(String email, PasswordUpdateRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -64,7 +66,19 @@ public class AuthService {
         userRepository.save(user);
     }
 
+//    private AuthResponse buildAuthResponse(User user) {
+//        return new AuthResponse(jwtUtils.generateAccessToken(user), "Bearer");
+//    }
+    // ... gudaha AuthService.java ...
+
     private AuthResponse buildAuthResponse(User user) {
-        return new AuthResponse(jwtUtils.generateAccessToken(user), "Bearer");
+        // Waxaan ku darnay user.getFirstName()
+        return new AuthResponse(
+                jwtUtils.generateAccessToken(user),
+                "Bearer",
+                user.getFirstName()
+        );
     }
+
+
 }
