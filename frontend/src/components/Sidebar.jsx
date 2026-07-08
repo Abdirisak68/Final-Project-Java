@@ -1,7 +1,15 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Plane, LayoutDashboard, LogOut, LocateFixedIcon, BookmarkCheck, Users, Plus  } from "lucide-react";
+import {
+  Plane,
+  LayoutDashboard,
+  LogOut,
+  LocateFixedIcon,
+  BookmarkCheck,
+  Users,
+  Plus,
+} from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -9,11 +17,14 @@ const Sidebar = () => {
 
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { path: "/all-destinations", label: "All Destinations", icon: LocateFixedIcon },
-    {path: "/add-destination", label: "Add New Destination", icon: Plus},
-    {path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck},
-    {path: "/add-booking", label: "Add New Booking", icon: Plus},
-    { path: "/profile", label: "Profile", icon: Users  }
+    {
+      path: "/all-destinations",
+      label: "All Destinations",
+      icon: LocateFixedIcon,},
+    { path: "/Destination", label: "Add New Destination", icon: Plus },
+    { path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck },
+    { path: "/add-booking", label: "Add New Booking", icon: Plus },
+    { path: "/profile", label: "Profile", icon: Users },
   ];
 
   return (

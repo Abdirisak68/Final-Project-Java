@@ -17,22 +17,22 @@ public class BackendApplication {
 
     //In Admin User la sameeyo marka programka la bilaabo, laakiin hadda waa la joojiyay si aan loo abuurin marar badan
     
-    // @Bean
-    // CommandLineRunner initAdminUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    //     return args -> {
-    //         if (!userRepository.existsByEmail("admin@gmail.com")) {
-    //             User admin = new User();
-    //             admin.setFirstName("Admin");
-    //             admin.setLastName("User");
-    //             admin.setEmail("admin@gmail.com");
-    //             admin.setHashedPassword(passwordEncoder.encode("admin123"));
-    //             admin.setRole("ADMIN");
-    //             userRepository.save(admin);
-    //             System.out.println("Admin user created successfully!");
-    //             System.out.println("Email: admin@gmail.com");
-    //             System.out.println("Password: admin123");
-    //         }
-    //     };
-    // }
+     @Bean
+     CommandLineRunner initAdminUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+         return args -> {
+             if (!userRepository.existsByEmail("admin@gmail.com")) {
+                 User admin = new User();
+                 admin.setFirstName("Admin");
+                 admin.setLastName("User");
+                 admin.setEmail("admin@gmail.com");
+                 admin.setHashedPassword(passwordEncoder.encode("admin123"));
+                 admin.setRole("ADMIN");
+                 userRepository.save(admin);
+                 System.out.println("Admin user created successfully!");
+                 System.out.println("Email: admin@gmail.com");
+                 System.out.println("Password: admin123");
+             }
+         };
+     }
 
 }
