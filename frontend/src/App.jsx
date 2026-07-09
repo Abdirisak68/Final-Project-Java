@@ -15,6 +15,8 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Destination from "./pages/Distination";
+import Profile from "./pages/Profile";
+
 
 function App() {
   return (
@@ -43,6 +45,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* Add more protected routes here */}
           <Route path="/Destination" element={<Destination />} />
+          <Route path="/Profile" element={<Profile />} />
         </Route>
 
         {/* Catch-all 404 */}

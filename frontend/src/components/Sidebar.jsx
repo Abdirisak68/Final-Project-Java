@@ -20,11 +20,12 @@ const Sidebar = () => {
     {
       path: "/all-destinations",
       label: "All Destinations",
-      icon: LocateFixedIcon,},
+      icon: LocateFixedIcon,
+    },
     { path: "/Destination", label: "Add New Destination", icon: Plus },
     { path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck },
     { path: "/add-booking", label: "Add New Booking", icon: Plus },
-    { path: "/profile", label: "Profile", icon: Users },
+    { path: "/Profile", label: "Profile", icon: Users },
   ];
 
   return (
