@@ -24,6 +24,7 @@ const Sidebar = () => {
     {
       path: "/all-destinations",
       label: "All Destinations",
+<<<<<<< HEAD
       icon: MapPin,
     },
     { path: "/add-destination", label: "Add New Destination", icon: Plus },
@@ -33,6 +34,14 @@ const Sidebar = () => {
     { path: "/add-booking", label: "Add New Booking", icon: Ticket },
     { path: "/all-users", label: "Manage All Users", icon: Users },
     { path: "/profile", label: "Profile", icon: UserPlus },
+=======
+      icon: LocateFixedIcon,
+    },
+    { path: "/Destination", label: "Add New Destination", icon: Plus },
+    { path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck },
+    { path: "/add-booking", label: "Add New Booking", icon: Plus },
+    { path: "/Profile", label: "Profile", icon: Users },
+>>>>>>> 422d3c1f08a016cd50c01a00d1d4f09d686a8cbd
   ];
 
   return (
