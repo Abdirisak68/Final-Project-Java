@@ -77,14 +77,14 @@ const Login = () => {
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full px-5 py-3.5 rounded-lg bg-[var(--gray-50)] border-2 outline-none transition-all duration-200 text-gray-800 placeholder-[var(--gray-400)] ${
+              className={`w-full px-5 py-3.5 rounded-lg bg-(--gray-50) border-2 outline-none transition-all duration-200 text-gray-800 placeholder-(--gray-400) ${
                 errors.email
-                  ? "border-[var(--red-500)] focus:border-[var(--red-600)]"
-                  : "border-[var(--gray-200)] focus:border-[var(--primary)]"
+                  ? "border-(--red-500) focus:border-(--red-600)"
+                  : "border-(--gray-200) focus:border-(--primary)"
               }`}
             />
             {errors.email && (
-              <p className="text-[var(--red-500)] text-sm mt-1 ml-1">
+              <p className="text-(--red-500) text-sm mt-1 ml-1">
                 {errors.email}
               </p>
             )}

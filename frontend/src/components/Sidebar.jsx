@@ -9,10 +9,9 @@ import {
   Ticket,
   Users,
   Plus,
-  CheckCircle,
   Package,
-  Settings,
   UserPlus,
+  CalendarCheck,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -20,29 +19,61 @@ const Sidebar = () => {
   const { logout, role } = useAuth();
 
   const navItems = [
-    { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    {
-      path: "/all-destinations",
-      label: "All Destinations",
-<<<<<<< HEAD
-      icon: MapPin,
-    },
-    { path: "/add-destination", label: "Add New Destination", icon: Plus },
-    { path: "/all-packages", label: "All Packages", icon: Package },
-    { path: "/add-package", label: "Add New Package", icon: Plus },
-    { path: "/all-bookings", label: "Manage Bookings", icon: CheckCircle },
-    { path: "/add-booking", label: "Add New Booking", icon: Ticket },
-    { path: "/all-users", label: "Manage All Users", icon: Users },
-    { path: "/profile", label: "Profile", icon: UserPlus },
-=======
-      icon: LocateFixedIcon,
-    },
-    { path: "/Destination", label: "Add New Destination", icon: Plus },
-    { path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck },
-    { path: "/add-booking", label: "Add New Booking", icon: Plus },
-    { path: "/Profile", label: "Profile", icon: Users },
->>>>>>> 422d3c1f08a016cd50c01a00d1d4f09d686a8cbd
-  ];
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/all-destinations",
+    label: "All Destinations",
+    icon: MapPin,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/add-destination",
+    label: "Add New Destination",
+    icon: Plus,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/all-packages",
+    label: "All Packages",
+    icon: Package,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/add-package",
+    label: "Add New Package",
+    icon: Plus,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/all-bookings",
+    label: "Manage Bookings",
+    icon: CalendarCheck,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/my-bookings",
+    label: "My Bookings",
+    icon: Ticket,
+    roles: ["CUSTOMER"],
+  },
+  {
+    path: "/all-users",
+    label: "Manage All Users",
+    icon: Users,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/profile",
+    label: "Profile",
+    icon: UserPlus,
+    roles: ["ADMIN", "CUSTOMER"],
+  },
+];
 
   return (
     <div className="w-64 bg-(--primary) text-(--text-color) h-screen flex flex-col fixed left-0 top-0 border-r border-(--gray-700)">
@@ -52,12 +83,14 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => (
-          <Link
-            to={item.path}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-              location.pathname === item.path
-                ? "bg-(--secondary) text-(--white)"
+        {navItems
+          .filter((item) => item.roles.includes(role))
+          .map((item) => (
+            <Link
+              to={item.path}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                location.pathname === item.path
+                  ? "bg-(--secondary) text-(--white)"
                 : "text-gray-300 hover:bg-(--gray-200)/15 hover:text-(--white)"
             }`}
           >

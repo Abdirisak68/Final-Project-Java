@@ -11,6 +11,9 @@ export function ApiProvider({ children }) {
   const [destination, setDestination] = useState(null);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [packages, setPackages] = useState([]);
+  const [travelPackage, setTravelPackage] = useState(null);
+  const [bookings, setBookings] = useState([]);
 
   const getDestinations = async () => {
     try {
@@ -120,6 +123,7 @@ export function ApiProvider({ children }) {
 
     return res.data.data;
   } catch (error) {
+    console.error("Error in getCurrentUser:", error);
     return null;
   } finally {
     setLoading(false);
@@ -133,10 +137,11 @@ const getAllUsers = async () => {
     const res = await api.get("/users/all-users");
 
     setUsers(res.data.data);
-    toast.success("Users fetched successfully!");
+    // toast.success("Users fetched successfully!");
     return res.data.data;
 
   } catch (error) {
+    // toast.error("Failed to fetch users.");
     return [];
   } finally {
     setLoading(false);
@@ -159,6 +164,94 @@ const deleteUser = async (id) => {
     setLoading(false);
   }
 };
+// update password api call
+const updatePassword = async (passwordData) => {
+  try {
+    setLoading(true);
+
+    await api.put("/auth/password", passwordData);
+
+    toast.success("Password updated successfully.");
+
+    return true;
+  } catch (error) {
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Travel package api calls
+const getPackages = async () => {
+  try {
+    setLoading(true);
+
+    const res = await api.get("/packages");
+
+    setPackages(res.data.data);
+
+    return res.data.data;
+  } catch (error) {
+    return [];
+    toast.error("Failed to fetch packages.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+const createPackage = async (packageData) => {
+  try {
+    setLoading(true);
+
+    const res = await api.post("/packages", packageData);
+
+    toast.success(res.data.message);
+
+    await getPackages();
+
+    return true;
+  } catch (error) {
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+const updatePackage = async (id, packageData) => {
+  try {
+    setLoading(true);
+
+    const res = await api.put(`/packages/${id}`, packageData);
+
+    toast.success(res.data.message);
+
+    await getPackages();
+
+    return true;
+  } catch (error) {
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+const deletePackage = async (id) => {
+  try {
+    setLoading(true);
+
+    const res = await api.delete(`/packages/${id}`);
+
+    toast.success(res.data.message);
+
+    setPackages((prev) =>
+      prev.filter((pkg) => pkg.travelPackageId !== id)
+    );
+
+    return true;
+  } catch (error) {
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
 
   const value = {
     loading,
@@ -166,15 +259,24 @@ const deleteUser = async (id) => {
     destinations,
     destination,
     users,
-
+    currentUser,
+    packages,
 
     getDestinations,
     createDestination,
     updateDestination,
     deleteDestination,
+
     getCurrentUser,
     getAllUsers,
     deleteUser,
+    updatePassword,
+
+    getPackages,
+    createPackage,
+    updatePackage,
+    deletePackage,
+
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

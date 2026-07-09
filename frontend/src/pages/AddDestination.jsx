@@ -36,6 +36,7 @@ const AddDestination = () => {
 
     if (success) {
       navigate("/all-destinations");
+      
     }
   };
 

@@ -70,7 +70,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                placeholder="John"
+                placeholder="Faarah"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className={`w-full px-5 py-3.5 rounded-lg bg-[var(--gray-50)] border-2 outline-none transition-all duration-200 text-gray-800 placeholder-[var(--gray-400)] ${
@@ -91,7 +91,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                placeholder="Doe"
+                placeholder="Warfaa"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className={`w-full px-5 py-3.5 rounded-lg bg-[var(--gray-50)] border-2 outline-none transition-all duration-200 text-gray-800 placeholder-[var(--gray-400)] ${
