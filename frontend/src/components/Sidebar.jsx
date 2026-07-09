@@ -5,26 +5,34 @@ import {
   Plane,
   LayoutDashboard,
   LogOut,
-  LocateFixedIcon,
-  BookmarkCheck,
+  MapPin,
+  Ticket,
   Users,
   Plus,
+  CheckCircle,
+  Package,
+  Settings,
+  UserPlus,
 } from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, role } = useAuth();
 
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     {
       path: "/all-destinations",
       label: "All Destinations",
-      icon: LocateFixedIcon,},
-    { path: "/Destination", label: "Add New Destination", icon: Plus },
-    { path: "/all-Bookings", label: "All Bookings", icon: BookmarkCheck },
-    { path: "/add-booking", label: "Add New Booking", icon: Plus },
-    { path: "/profile", label: "Profile", icon: Users },
+      icon: MapPin,
+    },
+    { path: "/add-destination", label: "Add New Destination", icon: Plus },
+    { path: "/all-packages", label: "All Packages", icon: Package },
+    { path: "/add-package", label: "Add New Package", icon: Plus },
+    { path: "/all-bookings", label: "Manage Bookings", icon: CheckCircle },
+    { path: "/add-booking", label: "Add New Booking", icon: Ticket },
+    { path: "/all-users", label: "Manage All Users", icon: Users },
+    { path: "/profile", label: "Profile", icon: UserPlus },
   ];
 
   return (

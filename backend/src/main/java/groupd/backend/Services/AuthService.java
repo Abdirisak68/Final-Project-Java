@@ -76,7 +76,8 @@ public class AuthService {
         return new AuthResponse(
                 jwtUtils.generateAccessToken(user),
                 "Bearer",
-                user.getFirstName()
+                user.getFirstName(),
+                user.getRole()
         );
     }
 

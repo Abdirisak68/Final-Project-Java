@@ -10,7 +10,5 @@ public class AuthResponse {
     private String accessToken;
     private String tokenType = "Bearer";
     private String firstName ;
-
-    public AuthResponse(String accessToken, String bearer) {
-    }
+    private String role;
 }

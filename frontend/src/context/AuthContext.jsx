@@ -9,6 +9,7 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [firstName, setFirstName] = useState(localStorage.getItem("firstName") || null);
+  const [role, setRole] = useState(localStorage.getItem("role") || null);
   const [loading, setLoading] = useState(false); 
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5001";
@@ -25,8 +26,10 @@ export function AuthProvider({ children }) {
       const data = response.data;
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("firstName", data.firstName || "User");
+      localStorage.setItem("role", data.role || "CUSTOMER");
       setToken(data.accessToken);
       setFirstName(data.firstName || "User");
+      setRole(data.role || "CUSTOMER");
 
       window.dispatchEvent(new Event("authChange")); 
       toast.success("Logged in successfully!");
@@ -53,8 +56,10 @@ export function AuthProvider({ children }) {
       const data = response.data;
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("firstName", data.firstName || firstName);
+      localStorage.setItem("role", data.role || "CUSTOMER");
       setToken(data.accessToken);
       setFirstName(data.firstName || firstName);
+      setRole(data.role || "CUSTOMER");
 
       window.dispatchEvent(new Event("authChange")); 
       toast.success("Registered successfully!");
@@ -70,13 +75,17 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
+    localStorage.removeItem("role");
+    setRole(null);
     setToken(null);
     setFirstName(null);
     window.dispatchEvent(new Event("authChange")); 
     toast.info("Logged out!");
   };
 
-  
+  const isAdmin = () => role === "ADMIN";
+  const isCustomer = () => role === "CUSTOMER";
+
   const value = {
     token,
     firstName,
@@ -84,7 +93,12 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    isAdmin,
+    isCustomer,
+    role,
   };
+
+ 
 
   return (
     <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

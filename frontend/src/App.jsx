@@ -14,7 +14,14 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Destination from "./pages/Distination";
+import AllDestinations from "./pages/AllDestinations";
+import AddDestination from "./pages/AddDestination";
+import AllPackages from "./pages/AllPackages";
+import AddPackage from "./pages/AddPackage";
+import AllBookings from "./pages/AllBookings";
+import AddBooking from "./pages/AddBooking";
+import AllUsers from "./pages/AllUsers";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -33,16 +40,16 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Protected Routes */}
-        <Route
-          element={
-            <ProtectedRoutes>
-              <DashboardLayout />
-            </ProtectedRoutes>
-          }
-        >
+        <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          {/* Add more protected routes here */}
-          <Route path="/Destination" element={<Destination />} />
+          <Route path="/all-destinations" element={<AllDestinations />} />
+          <Route path="/add-destination" element={<AddDestination />} />
+          <Route path="/all-packages" element={<AllPackages />} />
+          <Route path="/add-package" element={<AddPackage />} />
+          <Route path="/all-bookings" element={<AllBookings />} />
+          <Route path="/add-booking" element={<AddBooking />} />
+          <Route path="/all-users" element={<AllUsers />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         {/* Catch-all 404 */}
