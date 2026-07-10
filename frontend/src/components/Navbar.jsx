@@ -42,12 +42,11 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Auth */}
           <div className="hidden md:flex items-center space-x-4">
             {token ? (
               <div className="flex items-center gap-4">
                 <Link
-                  to="/dashboard"
+                  to={localStorage.getItem("role") === 'ADMIN' ? '/dashboard' : '/my-bookings'}
                   className="px-4 py-2 bg-(--secondary) rounded-lg hover:bg-(--secondary-hover) text-(--white) transition-colors"
                 >
                   Back to Dashboard
@@ -120,7 +119,7 @@ const Navbar = () => {
 
             {token ? (
               <Link
-                to="/dashboard"
+                to={localStorage.getItem("role") === 'ADMIN' ? '/dashboard' : '/my-bookings'}
                 onClick={() => setIsOpen(false)}
                 className="bg-(--secondary) hover:bg-(--secondary-hover) py-2 rounded-lg text-center text-(--white) transition-colors"
               >

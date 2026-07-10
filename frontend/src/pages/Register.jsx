@@ -35,7 +35,11 @@ const Register = () => {
     try {
       setLoading(true);
       await register(firstName, lastName, email, password);
-      navigate("/dashboard");
+      if(localStorage.getItem("role") === "ADMIN") {
+        navigate("/dashboard");
+      }else{
+        navigate("/my-bookings");
+      }
     } catch (error) {
       setLoading(false);
       setErrors({
@@ -47,6 +51,13 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--background)] p-6">
       <div className="bg-[var(--white)] px-8 py-10 md:px-10 md:py-12 rounded-xl shadow-lg w-full max-w-md border border-[var(--gray-200)]">
+        <button
+          className="flex items-center gap-2 p-2 rounded-md justify-start  hover:cursor-pointer hover:bg-gray-200/40 text-gray-700 hover:text-(--primary) transition-colors"
+          onClick={() => navigate("/")}
+        >
+          <span>⬅️</span>
+          <span>Back</span>
+        </button>
         
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">

@@ -62,6 +62,12 @@ const Sidebar = () => {
     roles: ["CUSTOMER"],
   },
   {
+    path: "/add-booking",
+    label: "Add New Booking",
+    icon: CalendarCheck,
+    roles: ["CUSTOMER"],
+  },
+  {
     path: "/all-users",
     label: "Manage All Users",
     icon: Users,

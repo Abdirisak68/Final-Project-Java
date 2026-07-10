@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { CalendarCheck, MapPin, Package, Users } from 'lucide-react'
@@ -6,14 +6,19 @@ import { useApi } from '../context/ApiContext'
 
 const Dashboard = () => {
   const { firstName } = useAuth()
-  const { users,packages,destinations } = useApi() 
+  const { users,packages,destinations,getDestinations,getAllUsers,getPackages,getBookings ,bookings} = useApi() 
 
-  
+  useEffect(()=>{
+    getAllUsers()
+    getPackages()
+    getDestinations()
+    getBookings()
+  },[])
 
   const cards = [
     {title: "Total Users", count: users.length, icon: Users, label: "+12"},
     {title: "Total Packages", count: packages.length, icon: Package, label: "Active"},
-    {title: "Total Bookings", count: 56, icon: CalendarCheck, label: "Pending"},
+    {title: "Total Bookings", count: bookings.length, icon: CalendarCheck, label: "Pending"},
     {title: "Total Destinations", count: destinations.length, icon: MapPin , label: "New"},
   ]
 

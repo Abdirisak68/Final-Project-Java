@@ -12,9 +12,8 @@ import {
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-[#f3f4f6] p-4 md:p-10 flex justify-center items-center font-['Outfit']">
+    <div className="min-h-screen bg-[#f3f4f6] p-4 md:p-10 flex justify-center items-center ">
       <div className="max-w-5xl w-full flex flex-col md:flex-row gap-8 bg-white p-6 md:p-12 rounded-3xl shadow-lg">
-        {/* Left Side: Form */}
         <div className="flex-1">
           <h2 className="text-3xl font-bold text-[#002060] mb-2">Contact Us</h2>
           <p className="text-gray-600 mb-8">
@@ -62,7 +61,6 @@ const Contact = () => {
           </form>
         </div>
 
-        {/* Right Side: Contact Info */}
         <div className="bg-[#002060] text-white p-8 rounded-3xl w-full md:w-80 flex flex-col justify-between">
           <div>
             <h3 className="text-xl font-semibold mb-6">

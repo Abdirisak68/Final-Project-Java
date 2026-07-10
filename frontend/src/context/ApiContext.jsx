@@ -14,269 +14,191 @@ export function ApiProvider({ children }) {
   const [packages, setPackages] = useState([]);
   const [travelPackage, setTravelPackage] = useState(null);
   const [bookings, setBookings] = useState([]);
+  const [booking, setBooking] = useState(null);
 
-  const getDestinations = async () => {
+  const executeRequest = async (callback) => {
     try {
       setLoading(true);
-
-      const res = await api.get("/destinations");
-
-      setDestinations(res.data.data);
-    } catch (error) {
-      console.error(error);
+      return await callback();
     } finally {
       setLoading(false);
     }
   };
 
-  //   // GET DESTINATION BY ID
-  //   // ===========================
-  //   const getDestinationById = async (id) => {
-  //     try {
-  //       setLoading(true);
-
-  //       const res = await api.get(`/destinations/${id}`);
-
-  //       setDestination(res.data.data);
-
-  //       return res.data.data;
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  // ===========================
-  // CREATE DESTINATION
-  // ===========================
-  const createDestination = async (formData) => {
-    try {
-      setLoading(true);
-
-      const res = await api.post("/destinations", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+  // DESTINATIONS
+  const getDestinations = () =>
+    executeRequest(async () => {
+      const r = await api.get("/destinations");
+      setDestinations(r.data.data);
+      return r.data.data;
+    });
+  const createDestination = (formData) =>
+    executeRequest(async () => {
+      const r = await api.post("/destinations", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
-      toast.success(res.data.message);
-
+      toast.success(r.data.message);
       await getDestinations();
-
       return true;
-    } catch (error) {
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateDestination = async (id, formData) => {
-    try {
-      setLoading(true);
-
-      const res = await api.put(`/destinations/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    });
+  const updateDestination = (id, formData) =>
+    executeRequest(async () => {
+      const r = await api.put(`/destinations/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
-      toast.success(res.data.message);
-
+      toast.success(r.data.message);
       await getDestinations();
-
       return true;
-    } catch (error) {
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  const deleteDestination = async (id) => {
-    try {
-      setLoading(true);
-
-      const res = await api.delete(`/destinations/${id}`);
-
-      toast.success(res.data.message);
-
-      setDestinations((prev) => prev.filter((item) => item.destId !== id));
-
+    });
+  const deleteDestination = (id) =>
+    executeRequest(async () => {
+      const r = await api.delete(`/destinations/${id}`);
+      toast.success(r.data.message);
+      setDestinations((p) => p.filter((x) => x.destId !== id));
       return true;
-    } catch (error) {
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
+    });
 
-  const getCurrentUser = async () => {
-  try {
-    setLoading(true);
+  // USERS
+  const getCurrentUser = () =>
+    executeRequest(async () => {
+      const r = await api.get("/users/me");
+      setCurrentUser(r.data.data);
+      return r.data.data;
+    });
+  const getAllUsers = () =>
+    executeRequest(async () => {
+      const r = await api.get("/users/all-users");
+      setUsers(r.data.data);
+      return r.data.data;
+    });
+  const deleteUser = (id) =>
+    executeRequest(async () => {
+      const r = await api.delete(`/users/${id}`);
+      toast.success(r.data.message);
+      setUsers((p) => p.filter((u) => (u.id ?? u.userId) !== id));
+      return true;
+    });
+  const updatePassword = (passwordData) =>
+    executeRequest(async () => {
+      await api.put("/auth/password", passwordData);
+      toast.success("Password updated successfully.");
+      return true;
+    });
 
-    const res = await api.get("/users/me");
+  // PACKAGES
+  const getPackages = () =>
+    executeRequest(async () => {
+      const r = await api.get("/packages");
+      setPackages(r.data.data);
+      return r.data.data;
+    });
+  const createPackage = (packageData) =>
+    executeRequest(async () => {
+      const r = await api.post("/packages", packageData);
+      toast.success(r.data.message);
+      await getPackages();
+      return true;
+    });
+  const updatePackage = (id, packageData) =>
+    executeRequest(async () => {
+      const r = await api.put(`/packages/${id}`, packageData);
+      toast.success(r.data.message);
+      await getPackages();
+      return true;
+    });
+  const deletePackage = (id) =>
+    executeRequest(async () => {
+      const r = await api.delete(`/packages/${id}`);
+      toast.success(r.data.message);
+      setPackages((p) => p.filter((x) => x.travelPackageId !== id));
+      return true;
+    });
 
-    setCurrentUser(res.data.data);
-
-    return res.data.data;
-  } catch (error) {
-    console.error("Error in getCurrentUser:", error);
-    return null;
-  } finally {
-    setLoading(false);
-  }
-};
-
-const getAllUsers = async () => {
-  try {
-    setLoading(true);
-
-    const res = await api.get("/users/all-users");
-
-    setUsers(res.data.data);
-    // toast.success("Users fetched successfully!");
-    return res.data.data;
-
-  } catch (error) {
-    // toast.error("Failed to fetch users.");
-    return [];
-  } finally {
-    setLoading(false);
-  }
-};
-const deleteUser = async (id) => {
-  try {
-    setLoading(true);
-
-    const res = await api.delete(`/users/${id}`);
-
-    toast.success(res.data.message);
-
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-
-    return true;
-  } catch (error) {
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
-// update password api call
-const updatePassword = async (passwordData) => {
-  try {
-    setLoading(true);
-
-    await api.put("/auth/password", passwordData);
-
-    toast.success("Password updated successfully.");
-
-    return true;
-  } catch (error) {
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
-
-// Travel package api calls
-const getPackages = async () => {
-  try {
-    setLoading(true);
-
-    const res = await api.get("/packages");
-
-    setPackages(res.data.data);
-
-    return res.data.data;
-  } catch (error) {
-    return [];
-    toast.error("Failed to fetch packages.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-const createPackage = async (packageData) => {
-  try {
-    setLoading(true);
-
-    const res = await api.post("/packages", packageData);
-
-    toast.success(res.data.message);
-
-    await getPackages();
-
-    return true;
-  } catch (error) {
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
-const updatePackage = async (id, packageData) => {
-  try {
-    setLoading(true);
-
-    const res = await api.put(`/packages/${id}`, packageData);
-
-    toast.success(res.data.message);
-
-    await getPackages();
-
-    return true;
-  } catch (error) {
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
-const deletePackage = async (id) => {
-  try {
-    setLoading(true);
-
-    const res = await api.delete(`/packages/${id}`);
-
-    toast.success(res.data.message);
-
-    setPackages((prev) =>
-      prev.filter((pkg) => pkg.travelPackageId !== id)
-    );
-
-    return true;
-  } catch (error) {
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
+  // BOOKINGS
+  const getBookings = () =>
+    executeRequest(async () => {
+      const r = await api.get("/bookings");
+      setBookings(r.data.data);
+      return r.data.data;
+    });
+  const getMyBookings = () =>
+    executeRequest(async () => {
+      const r = await api.get("/bookings/my");
+      setBookings(r.data.data);
+      return r.data.data;
+    });
+  const getBookingById = (id) =>
+    executeRequest(async () => {
+      const r = await api.get(`/bookings/${id}`);
+      setBooking(r.data.data);
+      return r.data.data;
+    });
+  const createBooking = (bookingData) =>
+    executeRequest(async () => {
+      const r = await api.post("/bookings", bookingData);
+      toast.success(r.data.message);
+      await getMyBookings();
+      return true;
+    });
+  const cancelBooking = (id) =>
+    executeRequest(async () => {
+      const r = await api.put(`/bookings/cancel/${id}`);
+      toast.success(r.data.message);
+      await getMyBookings();
+      return true;
+    });
+  const updateBookingStatus = (id, status) =>
+    executeRequest(async () => {
+      const r = await api.put(`/bookings/status/${id}`, { status });
+      toast.success(r.data.message);
+      await getBookings();
+      return true;
+    });
+  const approveCancellation = (id) =>
+    executeRequest(async () => {
+      const r = await api.put(`/bookings/cancel/${id}/approve`);
+      toast.success(r.data.message);
+      await getBookings();
+      return true;
+    });
+  const rejectCancellation = (id) =>
+    executeRequest(async () => {
+      const r = await api.put(`/bookings/cancel/${id}/reject`);
+      toast.success(r.data.message);
+      await getBookings();
+      return true;
+    });
 
   const value = {
     loading,
-
     destinations,
     destination,
     users,
     currentUser,
     packages,
-
+    travelPackage,
+    bookings,
+    booking,
     getDestinations,
     createDestination,
     updateDestination,
     deleteDestination,
-
     getCurrentUser,
     getAllUsers,
     deleteUser,
     updatePassword,
-
     getPackages,
     createPackage,
     updatePackage,
     deletePackage,
-
+    getBookings,
+    getMyBookings,
+    getBookingById,
+    createBooking,
+    cancelBooking,
+    updateBookingStatus,
+    approveCancellation,
+    rejectCancellation,
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

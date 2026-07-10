@@ -40,7 +40,11 @@ const Login = () => {
     try {
       setLoading(true);
       await login(email, password);
-      navigate("/dashboard"); 
+      if(localStorage.getItem("role") === "ADMIN") {
+        navigate("/dashboard");
+      }else{
+        navigate("/my-bookings");
+      }
     } catch (error) {
       setLoading(false);
       
@@ -53,10 +57,19 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--background)] p-6">
       <div className="bg-[var(--white)] px-8 py-10 md:px-10 md:py-12 rounded-xl shadow-lg w-full max-w-md border border-[var(--gray-200)]">
+        <button
+          className="flex items-center gap-2 p-2 rounded-md justify-start hover:cursor-pointer hover:bg-gray-200/40 text-gray-700 hover:text-(--primary) transition-colors"
+          onClick={() => navigate("/")}
+        >
+          <span>⬅️</span>
+          <span>Back</span>
+        </button>
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Plane className="text-[var(--secondary)]" size={32} />
-            <span className="text-2xl font-bold text-[var(--primary)]">Warfaa</span>
+            <span className="text-2xl font-bold text-[var(--primary)]">
+              Warfaa
+            </span>
           </div>
           <h1 className="text-3xl font-bold text-[var(--primary)] mb-2">
             Welcome Back
@@ -67,7 +80,6 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          
           <div className="space-y-1.5">
             <label className="text-sm font-semibold text-gray-700 ml-1">
               Email Address
@@ -133,7 +145,6 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        
       </div>
     </div>
   );

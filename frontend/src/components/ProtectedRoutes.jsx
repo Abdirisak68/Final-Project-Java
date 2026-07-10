@@ -12,6 +12,9 @@ export default function ProtectedRoutes({ children, allowedRoles }) {
   if (allowedRoles && !allowedRoles.includes(role)) {
     return <Navigate to="/unauthorized" replace />;
   }
+  // if(role ==="CUSTOMER"&& token){
+  //   return <Navigate to="/my-bookings" replace />;
+  // }
 
   return children;
 }

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Save, Package } from "lucide-react";
 import { useApi } from "../context/ApiContext";
 import { toast } from "react-toastify";
+import { is } from "zod/v4/locales";
 
 const AddPackage = () => {
   const navigate = useNavigate();
-  const { createPackage, getDestinations, destinations, loading } = useApi();
+    const location = useLocation();
+  const editPackage = location.state?.editPackage;
+  const isEditing = !!editPackage;
+  const { createPackage, getDestinations, updatePackage, destinations, loading } = useApi();
 
   const [formData, setFormData] = useState({
     packageName: "",
@@ -27,7 +31,25 @@ const AddPackage = () => {
 
   useEffect(() => {
     getDestinations();
-  }, []);
+    if (isEditing && editPackage) {
+      setFormData({
+        packageName: editPackage.packageName || "",
+        packageDescription: editPackage.packageDescription || "",
+        destinationId: editPackage.destination?.destId?.toString() || "",
+        price: editPackage.price?.toString() || "",
+        durationDays: editPackage.durationDays?.toString() || "",
+        airline: editPackage.airline || "",
+        departureLocation: editPackage.departureLocation || "",
+        arrivalLocation: editPackage.arrivalLocation || "",
+        departureDate: editPackage.departureDate || "",
+        departureTime: editPackage.departureTime || "",
+        hotelName: editPackage.hotelName || "",
+        roomType: editPackage.roomType || "",
+        numberOfNights: editPackage.numberOfNights?.toString() || "",
+        available: editPackage.available,
+      });
+    }
+  }, [isEditing, editPackage]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,7 +70,12 @@ const AddPackage = () => {
       destinationId: parseInt(formData.destinationId),
     };
 
-    const success = await createPackage(sendData);
+    let success;
+    if (isEditing) {
+      success = await updatePackage(editPackage.travelPackageId, sendData);
+    } else {
+      success = await createPackage(sendData);
+    }
 
     if (success) {
       navigate("/all-packages");
@@ -67,8 +94,12 @@ const AddPackage = () => {
         </Link>
 
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-(--primary)">Add New Package</h1>
-          <p className="mt-1 text-gray-500">Fill the form and save your new package.</p>
+          <h1 className="text-3xl font-bold text-(--primary)">
+            {isEditing ? "Edit Package" : "Add New Package"}
+          </h1>
+          <p className="mt-1 text-gray-500">
+            {isEditing ? "Update your package details below." : "Fill the form and save your new package."}
+          </p>
         </div>
 
         <div className="rounded-xl border border-(--gray-200) bg-(--white) p-6">
@@ -159,7 +190,7 @@ const AddPackage = () => {
               </div>
             </div>
 
-            {/* Flight Information */}
+            {/* Flight Info */}
             <div className="border-t border-gray-200 pt-4">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Flight Information
@@ -236,7 +267,7 @@ const AddPackage = () => {
               </div>
             </div>
 
-            {/* Hotel Information */}
+            {/* Hotel Info */}
             <div className="border-t border-gray-200 pt-4">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Hotel Information
@@ -312,7 +343,7 @@ const AddPackage = () => {
                 className="flex items-center gap-2 rounded-lg bg-(--secondary) px-4 py-2 text-(--white)"
               >
                 <Save size={16} />
-                {loading ? "Saving..." : "Save"}
+                {loading ?(isEditing ? "Updating..." : "Saving...") : (isEditing ? "Update Package" : "Save Package")}
               </button>
 
               <Link

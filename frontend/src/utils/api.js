@@ -47,6 +47,7 @@ api.interceptors.response.use(
 
       window.dispatchEvent(new Event("authChange"));
       window.location.href = "/login";
+      toast.reject("Your Token Expired, Login!")
     } else if (status === 403) {
       toast.error("Access denied.");
     } else if (status === 404) {

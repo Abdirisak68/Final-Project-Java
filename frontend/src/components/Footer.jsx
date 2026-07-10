@@ -1,3 +1,4 @@
+import { Plane } from "lucide-react";
 import React from "react";
 import {
   FaFacebookF,
@@ -9,6 +10,7 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -73,9 +75,13 @@ function Footer() {
             {/* Logo */}
 
             <div>
-              <h2 className="text-3xl font-bold text-[var(--primary)]">
-                ✈ TravelGo
-              </h2>
+              <Link
+                to="/"
+                className="flex items-center gap-2 text-2xl font-bold text-(--text-color) tracking-wide"
+              >
+                <Plane className="text-(--secondary)" size={28} />
+                Warfaa
+              </Link>
 
               <p className="text-gray-500 mt-5 leading-7">
                 Explore the world's most beautiful destinations with affordable
