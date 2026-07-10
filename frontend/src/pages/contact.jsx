@@ -133,7 +133,7 @@ const Contact = () => {
                 <FaEnvelope className="text-xl" />
                 <div>
                   <p className="text-xs text-gray-300">Email:</p>
-                  <p className="font-medium">warfaa@zalomi.com</p>
+                  <p className="font-medium">warfaa@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -145,7 +145,7 @@ const Contact = () => {
               <FaFacebook className="cursor-pointer hover:text-blue-400" />
               <FaInstagram className="cursor-pointer hover:text-pink-400" />
               <FaSnapchat className="cursor-pointer hover:text-yellow-400" />
-              <FaTiktok className="cursor-pointer" />
+              <FaTiktok className="cursor-pointer hover:text-black" />
               <FaTwitter className="cursor-pointer hover:text-blue-300" />
             </div>
           </div>
