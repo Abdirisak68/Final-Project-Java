@@ -83,9 +83,6 @@ export function AuthProvider({ children }) {
     toast.info("Logged out!");
   };
 
-  const isAdmin = () => role === "ADMIN";
-  const isCustomer = () => role === "CUSTOMER";
-
   const value = {
     token,
     firstName,
@@ -93,8 +90,6 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
-    isAdmin,
-    isCustomer,
     role,
   };
 

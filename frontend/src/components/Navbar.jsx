@@ -33,7 +33,7 @@ const Navbar = () => {
               About
             </Link>
 
-            <Link to="/servace" className="hover:text-(--white) transition-colors">
+            <Link to="/services" className="hover:text-(--white) transition-colors">
               Services
             </Link>
 
@@ -100,7 +100,7 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to="/servace"
+              to="/services"
               onClick={() => setIsOpen(false)}
               className="hover:text-(--white) transition-colors"
             >

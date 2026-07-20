@@ -31,9 +31,12 @@ public class UserService {
         return userDTOs;
    }
 
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
+    public void deleteUser(Long id, String loggedInEmail) {
+        User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        userRepository.delete(user);
+        if (userToDelete.getEmail().equals(loggedInEmail)) {
+            throw new IllegalArgumentException("You cannot delete your own logged-in account.");
+        }
+        userRepository.deleteById(id);
     }
 }

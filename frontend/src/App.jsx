@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/about";
-import Servace from "./pages/servace";
 import Contact from "./pages/contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -23,6 +22,7 @@ import AddBooking from "./pages/AddBooking";
 import AllUsers from "./pages/AllUsers";
 import Profile from "./pages/Profile";
 import MyBookings from "./pages/MyBookings";
+import Services from "./pages/Services";
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
         <Route element={<PublicLayouts />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/servace" element={<Servace />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
 

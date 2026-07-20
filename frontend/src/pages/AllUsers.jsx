@@ -1,21 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useApi } from "../context/ApiContext";
 import { toast } from "react-toastify";
+import DeleteConfirmation from "../components/DeleteConfirmation";
 
 const AllUsers = () => {
   const { users , getAllUsers, deleteUser, currentUser } = useApi();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   useEffect(() => {
     getAllUsers();
     
   }, []);
 
-  const handleDeleteUser = (userId) => {
-    if(userId === currentUser?.id) {
-      toast.error("You cannot delete your own account.");
-      return;
-    }else{
-      deleteUser(userId);
+  const handleDeleteClick = (user) => {
+    // if( user.id === currentUser?.id) {
+    //   toast.error("You cannot delete your own account.");
+    //   return;
+    // }
+    setDeleteItem(user);
+    setDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteItem) {
+      deleteUser(deleteItem.id);
+      setDeleteModal(false);
+      setDeleteItem(null);
     }
   };
 
@@ -47,7 +58,7 @@ const AllUsers = () => {
                     <td className="border-b border-(--primary)/10 px-4 py-3">{user?.role ?? "User"}</td>
                     <td className="border-b border-(--primary)/10 px-4 py-3">
                       <button
-                        onClick={() => handleDeleteUser(user?.id)}
+                        onClick={() => handleDeleteClick(user)}
                         className="rounded-lg bg-(--red-500) px-3 py-2 text-white transition hover:opacity-90"
                         
                       >
@@ -66,6 +77,13 @@ const AllUsers = () => {
             </tbody>
           </table>
         </div>
+
+      <DeleteConfirmation
+        isOpen={deleteModal}
+        onClose={() => { setDeleteModal(false); setDeleteItem(null); }}
+        onConfirm={confirmDelete}
+        itemName={deleteItem ? `${deleteItem.firstName} ${deleteItem.lastName}` : "this user"}
+      />
       </>
     
   );

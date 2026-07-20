@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Edit, ImagePlus, Map, MapPin, Plus, Trash2, X } from "lucide-react";
 import { useApi } from "../context/ApiContext";
+import DeleteConfirmation from "../components/DeleteConfirmation";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,6 +20,8 @@ const AllDestinations = () => {
   const [editId, setEditId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
   const [preview, setPreview] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   useEffect(() => {
     getDestinations();
@@ -79,11 +82,16 @@ const AllDestinations = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm("Delete this destination?");
+  const handleDeleteClick = (item) => {
+    setDeleteItem(item);
+    setDeleteModal(true);
+  };
 
-    if (confirmed) {
-      await deleteDestination(id);
+  const confirmDelete = async () => {
+    if (deleteItem) {
+      await deleteDestination(deleteItem.destId);
+      setDeleteModal(false);
+      setDeleteItem(null);
     }
   };
 
@@ -165,7 +173,7 @@ const AllDestinations = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(item.destId)}
+                    onClick={() => handleDeleteClick(item)}
                     className="rounded-lg bg-red-50 px-3 py-2 text-red-600"
                   >
                     <Trash2 size={16} />
@@ -259,6 +267,13 @@ const AllDestinations = () => {
           </div>
         </div>
       )}
+
+      <DeleteConfirmation
+        isOpen={deleteModal}
+        onClose={() => { setDeleteModal(false); setDeleteItem(null); }}
+        onConfirm={confirmDelete}
+        itemName={deleteItem?.destCountry || "this destination"}
+      />
     </div>
   );
 };

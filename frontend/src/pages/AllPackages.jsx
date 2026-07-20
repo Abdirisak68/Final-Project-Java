@@ -2,19 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Edit, Trash2, Plus, MapPin, Plane, Hotel, Calendar, Clock, DollarSign, CheckCircle2, XCircle } from "lucide-react";
 import { useApi } from "../context/ApiContext";
+import DeleteConfirmation from "../components/DeleteConfirmation";
 
 const AllPackages = () => {
   const { packages, loading, getPackages, updatePackage, deletePackage } = useApi();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   useEffect(() => {
     getPackages();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm("Delete this package?");
+  const handleDeleteClick = (pkg) => {
+    setDeleteItem(pkg);
+    setDeleteModal(true);
+  };
 
-    if (confirmed) {
-      await deletePackage(id);
+  const confirmDelete = async () => {
+    if (deleteItem) {
+      await deletePackage(deleteItem.travelPackageId);
+      setDeleteModal(false);
+      setDeleteItem(null);
     }
   };
 
@@ -129,7 +137,7 @@ const AllPackages = () => {
                     Edit
                   </Link>
                   <button
-                    onClick={() => handleDelete(pkg.travelPackageId)}
+                    onClick={() => handleDeleteClick(pkg)}
                     className="rounded-lg bg-red-50 px-3 py-2 text-red-600 hover:bg-red-100 transition-all"
                   >
                     <Trash2 size={16} />
@@ -140,6 +148,13 @@ const AllPackages = () => {
           ))}
         </div>
       )}
+
+      <DeleteConfirmation
+        isOpen={deleteModal}
+        onClose={() => { setDeleteModal(false); setDeleteItem(null); }}
+        onConfirm={confirmDelete}
+        itemName={deleteItem?.packageName || "this package"}
+      />
     </div>
   );
 };

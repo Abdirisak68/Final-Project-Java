@@ -30,6 +30,7 @@ public class EmailService {
         String destination = booking.getTravelPackage().getDestination().getDestCountry();
         LocalDate departureDate = booking.getTravelPackage().getDepartureDate();
         LocalTime departureTime = booking.getTravelPackage().getDepartureTime();
+        BigDecimal amount = booking.getPayment().getAmount();
 
         message.setTo(to);
         message.setSubject("Your Booking Has Been Confirmed");
@@ -45,7 +46,8 @@ public class EmailService {
                         "Package: " + packageName + "\n" +
                         "Destination: " + destination + "\n" +
                         "Departure Date: " + departureDate + "\n" +
-                        "Departure Time: " + departureTime + "\n\n" +
+                        "Departure Time: " + departureTime + "\n" +
+                        "Total Amount: " + amount + "\n\n" +
 
                         "Please ensure that you arrive at the departure location at least 2 hours before the scheduled departure time and carry all required travel documents.\n\n" +
 
