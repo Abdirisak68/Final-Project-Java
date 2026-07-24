@@ -4,9 +4,16 @@ import {
   FaCalendarAlt,
   FaUsers,
   FaSearch,
+  FaShieldAlt,
+  FaTags,
+  FaHeadset,
+  FaQuoteRight,
+  FaStar,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto   py-16">
@@ -32,11 +39,15 @@ function Home() {
             </p>
 
             <div className="flex gap-4 mt-10">
-              <button className="bg-[var(--primary)] text-white px-8 py-4 rounded-xl hover:opacity-90 transition">
+              <button
+                onClick={() => navigate("/services")}
+                className="bg-[var(--primary)] text-white px-8 py-4 rounded-xl hover:opacity-90 transition">
                 Explore Now
               </button>
 
-              <button className="border-2 border-[var(--primary)] text-[var(--primary)] px-8 py-4 rounded-xl hover:bg-[var(--primary)] hover:text-white transition">
+              <button
+              onClick={()=> navigate("/about")}
+              className="border-2 border-[var(--primary)] text-[var(--primary)] px-8 py-4 rounded-xl hover:bg-[var(--primary)] hover:text-white transition">
                 Learn More
               </button>
             </div>
@@ -76,50 +87,114 @@ function Home() {
           </div>
         </div>
 
-        {/* Search Card */}
-        <div className="bg-white rounded-3xl shadow-2xl mt-16 p-6">
-          <div className="grid lg:grid-cols-4 gap-6">
-            <div>
-              <label className="font-semibold text-gray-700">Location</label>
 
-              <div className="flex items-center gap-3 mt-3 border rounded-xl px-4 py-3">
-                <FaMapMarkerAlt className="text-[var(--secondary)]" />
-                <input
-                  type="text"
-                  placeholder="Where are you going?"
-                  className="outline-none w-full"
-                />
+
+        {/* Achievements Section */}
+        <div className="mt-24">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-[var(--primary)]">Our Track Record</h2>
+            <p className="text-gray-600 mt-4 text-lg">A quick glance at our trusted legacy</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <h3 className="text-5xl font-bold text-[var(--secondary)] mb-2">10K+</h3>
+              <p className="text-gray-600 text-lg font-medium">Happy Travelers</p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <h3 className="text-5xl font-bold text-[var(--secondary)] mb-2">50+</h3>
+              <p className="text-gray-600 text-lg font-medium">Global Destinations</p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <h3 className="text-5xl font-bold text-[var(--secondary)] mb-2">5+</h3>
+              <p className="text-gray-600 text-lg font-medium">Years of Excellence</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Why Choose Us Section */}
+        <div className="mt-24">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-[var(--primary)]">Why Choose Us</h2>
+            <p className="text-gray-600 mt-4 text-lg">Reliable, transparent, and unforgettable travel experiences.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-2xl text-[var(--primary)]">
+                <FaShieldAlt />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">Unmatched Security</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Your safety is our top priority. We ensure 100% secure bookings and trusted travel partners.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <div className="bg-orange-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-2xl text-[var(--secondary)]">
+                <FaTags />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">Best Value Guarantee</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We offer highly competitive pricing without ever compromising on the quality of your trip.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-xl">
+              <div className="bg-green-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-2xl text-green-600">
+                <FaHeadset />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">24/7 Dedicated Support</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our expert travel concierges are on standby around the clock to assist you anywhere, anytime.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="mt-24 pb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-[var(--primary)]">What Our Clients Say</h2>
+            <p className="text-gray-600 mt-4 text-lg">Real experiences from our global travelers</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white p-8 rounded-3xl shadow-xl relative">
+              <div className="text-5xl text-orange-200 absolute top-4 right-8">
+                <FaQuoteRight />
+              </div>
+              <div className="flex gap-1 text-yellow-400 mb-6 text-sm">
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+              </div>
+              <p className="text-gray-600 italic text-lg mb-6 relative z-10">
+                "My recent trip was absolutely incredible. The service was top-notch, and they took care of every detail from start to finish. Highly recommended!"
+              </p>
+              <div className="flex items-center gap-4 mt-6 border-t pt-6">
+                <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400" className="w-full h-full object-cover" alt="Ahmed Jama" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-lg">Ahmed Jama</h4>
+                  <p className="text-gray-500 text-sm">Entrepreneur, Mogadishu</p>
+                </div>
               </div>
             </div>
 
-            <div>
-              <label className="font-semibold text-gray-700">Date</label>
-
-              <div className="flex items-center gap-3 mt-3 border rounded-xl px-4 py-3">
-                <FaCalendarAlt className="text-[var(--secondary)]" />
-                <input type="date" className="outline-none w-full" />
+            <div className="bg-white p-8 rounded-3xl shadow-xl relative">
+              <div className="text-5xl text-orange-200 absolute top-4 right-8">
+                <FaQuoteRight />
               </div>
-            </div>
-
-            <div>
-              <label className="font-semibold text-gray-700">Guests</label>
-
-              <div className="flex items-center gap-3 mt-3 border rounded-xl px-4 py-3">
-                <FaUsers className="text-[var(--secondary)]" />
-                <select className="outline-none w-full">
-                  <option>1 Person</option>
-                  <option>2 Persons</option>
-                  <option>3 Persons</option>
-                  <option>4 Persons</option>
-                </select>
+              <div className="flex gap-1 text-yellow-400 mb-6 text-sm">
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
               </div>
-            </div>
-
-            <div className="flex items-end">
-              <button className="w-full bg-[var(--primary)] hover:bg-blue-900 text-white rounded-xl py-4 flex justify-center items-center gap-3 text-lg font-semibold transition">
-                <FaSearch />
-                Search
-              </button>
+              <p className="text-gray-600 italic text-lg mb-6 relative z-10">
+                "A truly reliable company. The pricing is very reasonable, and the staff is incredibly polite and always ready to help. I will definitely travel with them again."
+              </p>
+              <div className="flex items-center gap-4 mt-6 border-t pt-6">
+                <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400" className="w-full h-full object-cover" alt="Fadumo Ali" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-lg">Fadumo Ali</h4>
+                  <p className="text-gray-500 text-sm">Student, Hargeisa</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -31,6 +31,10 @@ public class UserService {
         return userDTOs;
    }
 
+    public long countActiveUsers() {
+        return userRepository.countByActive(true);
+    }
+
     public void deleteUser(Long id, String loggedInEmail) {
         User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -38,5 +42,16 @@ public class UserService {
             throw new IllegalArgumentException("You cannot delete your own logged-in account.");
         }
         userRepository.deleteById(id);
+    }
+
+    public UserDTO changeUserActive(Long id, String loggedInEmail) {
+        User userToToggle = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (userToToggle.getEmail().equals(loggedInEmail)) {
+            throw new IllegalArgumentException("You cannot deactivate your own account status.");
+        }
+        userToToggle.setActive(!userToToggle.isActive());
+        userRepository.save(userToToggle);
+        return UserDTO.fromEntity(userToToggle);
     }
 }

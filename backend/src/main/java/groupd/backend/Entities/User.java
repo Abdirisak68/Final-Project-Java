@@ -23,4 +23,6 @@ public class User {
     private String hashedPassword;
     private String role;
     private LocalDateTime createdDate;
+    @Column(nullable = true )
+    private boolean active = true;
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@JsonPropertyOrder({ "id", "firstName", "lastName", "email", "role", "createdDate" })
+@JsonPropertyOrder({ "id", "firstName", "lastName", "email", "role", "active", "createdDate" })
 public class UserDTO {
 
     private Long id;
@@ -15,6 +15,7 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String role;
+    private boolean active;
     private LocalDateTime createdDate;
 
     public static UserDTO fromEntity(User user) {
@@ -24,6 +25,7 @@ public class UserDTO {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
+        dto.setActive(user.isActive());
         dto.setCreatedDate(user.getCreatedDate());
         return dto;
     }

@@ -15,6 +15,12 @@ export function ApiProvider({ children }) {
   const [travelPackage, setTravelPackage] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [booking, setBooking] = useState(null);
+  const [paymentStats, setPaymentStats] = useState({ totalRevenue: 0, totalRefunded: 0 });
+  const [activeUsers, setActiveUsers] = useState(0);
+
+
+
+
 
   const executeRequest = async (callback) => {
     try {
@@ -76,6 +82,19 @@ export function ApiProvider({ children }) {
       const r = await api.delete(`/users/${id}`);
       toast.success(r.data.message);
       setUsers((p) => p.filter((u) => (u.id ?? u.userId) !== id));
+      return true;
+    });
+    const getAllActiveUsers = () =>
+    executeRequest(async () => {
+      const r = await api.get("/users/all-active-users");
+      setActiveUsers(r.data.data);
+      return r.data.data;
+    });
+  const toggleUserActive = (id) =>
+    executeRequest(async () => {
+      const r = await api.put(`/users/active/${id}`);
+      toast.success(r.data.message);
+      setUsers((prev) => prev.map(u => u.id === id ? r.data.data : u));
       return true;
     });
   const updatePassword = (passwordData) =>
@@ -169,6 +188,14 @@ export function ApiProvider({ children }) {
       return true;
     });
 
+  // PAYMENTS
+  const getPaymentStats = () =>
+    executeRequest(async () => {
+      const r = await api.get("/payments/stats");
+      setPaymentStats(r.data.data);
+      return r.data.data;
+    });
+
   const value = {
     loading,
     destinations,
@@ -179,6 +206,7 @@ export function ApiProvider({ children }) {
     travelPackage,
     bookings,
     booking,
+    paymentStats,
     getDestinations,
     createDestination,
     updateDestination,
@@ -186,6 +214,7 @@ export function ApiProvider({ children }) {
     getCurrentUser,
     getAllUsers,
     deleteUser,
+    toggleUserActive,
     updatePassword,
     getPackages,
     createPackage,
@@ -199,6 +228,9 @@ export function ApiProvider({ children }) {
     updateBookingStatus,
     approveCancellation,
     rejectCancellation,
+    getPaymentStats,
+    activeUsers,
+    getAllActiveUsers,
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

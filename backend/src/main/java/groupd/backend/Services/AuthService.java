@@ -36,6 +36,7 @@ public class AuthService {
         user.setHashedPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("CUSTOMER");
         user.setCreatedDate(LocalDateTime.now());
+        user.setActive(true);
 
         userRepository.save(user);
         return buildAuthResponse(user);
@@ -48,6 +49,11 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getHashedPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
+
+        if (!user.isActive()) {
+            throw  new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account has been disabled");
+        }
+
 
         return buildAuthResponse(user);
     }

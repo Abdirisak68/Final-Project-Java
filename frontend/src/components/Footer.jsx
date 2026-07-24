@@ -15,8 +15,6 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="mt-28">
-      {/* Newsletter */}
-
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div
           className="rounded-3xl px-10 py-12 shadow-2xl"
@@ -25,7 +23,6 @@ function Footer() {
           }}
         >
           <div className="grid lg:grid-cols-2 gap-10 items-center">
-            {/* Left */}
 
             <div className="flex items-center gap-8">
               <div className="w-28 h-28 rounded-full bg-white/20 flex items-center justify-center text-6xl">
@@ -43,8 +40,6 @@ function Footer() {
                 </p>
               </div>
             </div>
-
-            {/* Right */}
 
             <div>
               <div className="bg-white rounded-full p-2 flex">
@@ -67,17 +62,14 @@ function Footer() {
         </div>
       </div>
 
-      {/* Footer */}
-
       <div className="bg-white -mt-12 pt-24 pb-8 shadow-inner">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-12">
-            {/* Logo */}
 
             <div>
               <Link
                 to="/"
-                className="flex items-center gap-2 text-2xl font-bold text-(--text-color) tracking-wide"
+                className="flex items-center gap-2 text-2xl font-bold text-(--primary) tracking-wide"
               >
                 <Plane className="text-(--secondary)" size={28} />
                 Warfaa

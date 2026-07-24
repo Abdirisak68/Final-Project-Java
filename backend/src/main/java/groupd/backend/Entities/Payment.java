@@ -39,5 +39,6 @@ public class Payment {
     private PaymentStatus paymentStatus;
 
     private LocalDateTime paymentDate;
+
     private BigDecimal refundedAmount;
 }

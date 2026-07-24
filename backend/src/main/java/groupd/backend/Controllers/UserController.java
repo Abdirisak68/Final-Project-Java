@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,23 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<UserDTO>>> getAll() {
         List<UserDTO> users = userService.findAllUsers();
         ApiResponse<List<UserDTO>> response = new ApiResponse<>(true, "All users retrieved successfully", users);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all-active-users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Long>> getActiveUserCount() {
+        long count = userService.countActiveUsers();
+        ApiResponse<Long> response = new ApiResponse<>(true, "Active user count retrieved successfully", count);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/active/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<UserDTO>> changeUserActive(@PathVariable Long id) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserDTO user = userService.changeUserActive(id, email);
+        ApiResponse<UserDTO> response = new ApiResponse<>(true, "User status updated successfully", user);
         return ResponseEntity.ok(response);
     }
 
